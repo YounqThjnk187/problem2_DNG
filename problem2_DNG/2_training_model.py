@@ -10,6 +10,8 @@ from sklearn.ensemble import HistGradientBoostingClassifier
 from sklearn.preprocessing import StandardScaler
 from sklearn.metrics import roc_auc_score, precision_score, recall_score, f1_score, precision_recall_curve
 from sklearn.model_selection import TimeSeriesSplit
+from sklearn.inspection import permutation_importance
+import matplotlib.pyplot as plt
 
 warnings.filterwarnings('ignore')
 
@@ -55,6 +57,7 @@ print(f"Sử dụng {len(feature_cols)} features để huấn luyện.")
 print("\n--- Bước 2: Bắt đầu Walk-Forward Cross-Validation để đánh giá ---")
 tss = TimeSeriesSplit(n_splits=N_SPLITS)
 oof_preds, oof_indices, auc_scores = [], [], []
+importances_over_time = []
 
 for fold, (train_idx, test_idx) in enumerate(tss.split(X, y)):
     print(f"\n--- FOLD {fold+1}/{N_SPLITS} ---")
@@ -72,6 +75,29 @@ for fold, (train_idx, test_idx) in enumerate(tss.split(X, y)):
         random_state=RANDOM_STATE, class_weight='balanced'
     )
     model.fit(X_train_scaled, y_train)
+
+    print("Đang tính toán Permutation Importance cho fold này...")
+    # Tính importance trên tập test của fold hiện tại
+    perm_importance_result = permutation_importance(
+        model, X_test_scaled, y_test, 
+        n_repeats=10,       # Lặp lại 10 lần để kết quả ổn định
+        random_state=RANDOM_STATE, 
+        n_jobs=-1           # Tận dụng tất cả CPU
+    )
+    
+    # Tạo DataFrame để lưu kết quả
+    fold_importance_df = pd.DataFrame({
+        'fold_end_date': final_df['date'].iloc[test_idx].max(), # Dùng ngày cuối của fold làm mốc thời gian
+        'feature': feature_cols,
+        'importance_mean': perm_importance_result.importances_mean,
+        'importance_std': perm_importance_result.importances_std
+    })
+    importances_over_time.append(fold_importance_df)
+    print("Đã tính xong và lưu lại Permutation Importance.")
+    # <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+    
+    preds_proba = model.predict_proba(X_test_scaled)[:,1]
+
 
     preds_proba = model.predict_proba(X_test_scaled)[:,1]
     oof_preds.extend(preds_proba)
@@ -128,3 +154,40 @@ joblib.dump(final_model, os.path.join(MODEL_OUTPUT_DIR,"final_model.joblib"))
 joblib.dump(final_scaler, os.path.join(MODEL_OUTPUT_DIR,"final_scaler.joblib"))
 joblib.dump(feature_cols, os.path.join(MODEL_OUTPUT_DIR,"feature_cols.joblib"))
 print("Đã lưu model, scaler và danh sách features cuối cùng.")
+
+print("\n--- Bước 4: Phân tích và lưu Feature Importance Over Time ---")
+if importances_over_time:
+    # Ghép kết quả từ tất cả các fold lại
+    full_importance_df = pd.concat(importances_over_time).sort_values(
+        by=['fold_end_date', 'importance_mean'], ascending=[True, False]
+    )
+    
+    # Lưu lại file CSV để phân tích sau này trong báo cáo
+    importance_path = os.path.join(MODEL_OUTPUT_DIR, "feature_importance_over_time.csv")
+    full_importance_df.to_csv(importance_path, index=False)
+    print(f"Đã lưu dữ liệu Feature Importance vào: {importance_path}")
+    
+    # Trực quan hóa sự thay đổi
+    pivot_df = full_importance_df.pivot(index='fold_end_date', columns='feature', values='importance_mean')
+    
+    # Tự động chọn ra 7 features quan trọng nhất (tính trung bình qua các fold)
+    top_7_features = pivot_df.mean().nlargest(7).index
+    
+    plt.style.use('seaborn-v0_8-whitegrid')
+    fig, ax = plt.subplots(figsize=(16, 8))
+    pivot_df[top_7_features].plot(ax=ax, marker='o', linestyle='-')
+    
+    ax.set_title('Sự thay đổi Tầm quan trọng của các Yếu tố qua các Thời kỳ', fontsize=16)
+    ax.set_xlabel('Thời điểm (Ngày cuối của mỗi Fold)', fontsize=12)
+    ax.set_ylabel('Permutation Importance (Mean)', fontsize=12)
+    ax.legend(title='Features', bbox_to_anchor=(1.05, 1), loc='upper left')
+    ax.grid(True)
+    plt.tight_layout()
+    
+    # Lưu biểu đồ
+    plot_path = os.path.join(MODEL_OUTPUT_DIR, "feature_importance_over_time.png")
+    plt.savefig(plot_path, dpi=300, bbox_inches='tight')
+    plt.show()
+    print(f"Đã lưu biểu đồ Feature Importance vào: {plot_path}")
+
+print("\nĐã lưu model, scaler và danh sách features cuối cùng.")
