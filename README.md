@@ -80,6 +80,14 @@ python 3_backtest_simulation.py
 * Trực quan hóa **Equity Curve & Drawdown** so với VN-Index.
 * In báo cáo hiệu suất chi tiết.
 
+#### **Bước 4: Phân tích Feature Importance**
+
+```bash
+python 4_analyzis.py
+```
+
+* Xếp hạng trung bình các yếu tố (giống Figure 7).
+* Sự thay đổi của từng yếu tố theo thời gian (giống Figure 10).
 ---
 
 ## 🎉 Kết
