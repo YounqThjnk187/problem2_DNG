@@ -1,8 +1,4 @@
-Mình sẽ giúp bạn chỉnh README này thêm sinh động, dễ đọc hơn, và mang chút “khí thế dự thi” để thu hút người đọc. Đây là phiên bản được làm mới:
-
----
-
-# 🚀 Dự Án DSTC 2024: Xây Dựng Chiến Lược Đầu Tư Định Lượng Lai Dựa Trên Học Máy
+# 🚀 problem2_DNG DSTC 2024: Xây Dựng Chiến Lược Đầu Tư Định Lượng Lai Dựa Trên Học Máy
 
 ## 🎯 Giới Thiệu
 
@@ -26,9 +22,9 @@ Kết hợp cả ba yếu tố này, hệ thống vừa có **tư duy dài hạn
 
 Dự án gồm **3 file Python chính**, chạy theo thứ tự:
 
-1. `1_feature_engineering_final.py` → Thu thập & tạo bộ **features + target**.
-2. `2_model_training_final.py` → Huấn luyện mô hình `HistGradientBoostingClassifier` với **Time Series Cross-Validation**.
-3. `3_backtest_simulation_final.py` → Backtest chiến lược + trực quan hóa hiệu suất.
+1. `1_get_feature.py` → Thu thập & tạo bộ **features + target**.
+2. `2_training_model.py` → Huấn luyện mô hình `HistGradientBoostingClassifier` với **Time Series Cross-Validation**.
+3. `3_backtest_simulation.py` → Backtest chiến lược + trực quan hóa hiệu suất.
 
 ## ⚙️ Hướng Dẫn Cài Đặt
 
@@ -59,7 +55,7 @@ PASSWORD = "Fiinquant0606"
 #### **Bước 1: Tạo Dữ Liệu**
 
 ```bash
-python 1_feature_engineering_final.py
+python 1_get_feature.py
 ```
 
 * Đầu vào: dữ liệu từ API FiinQuant.
@@ -69,7 +65,7 @@ python 1_feature_engineering_final.py
 #### **Bước 2: Huấn Luyện Mô Hình**
 
 ```bash
-python 2_model_training_final.py
+python 2_training_model.py
 ```
 
 * Đầu ra: thư mục `trained_models_pro_final` chứa model + scaler + features.
@@ -78,7 +74,7 @@ python 2_model_training_final.py
 #### **Bước 3: Backtest Chiến Lược**
 
 ```bash
-python 3_backtest_simulation_final.py
+python 3_backtest_simulation.py
 ```
 
 * Trực quan hóa **Equity Curve & Drawdown** so với VN-Index.
@@ -91,7 +87,3 @@ python 3_backtest_simulation_final.py
 Với dự án này, chúng tôi không chỉ xây dựng một mô hình học máy, mà còn tạo ra một **hệ thống giao dịch định lượng có tính ứng dụng thực tế** cho thị trường Việt Nam.
 
 🔮 Biết đâu trong tương lai, đây sẽ là một “chìa khóa vàng” cho nhà đầu tư thông minh!
-
----
-
-👉 Bạn có muốn mình thêm **hình minh họa / emoji flowchart** cho 3 bước (Feature → Training → Backtest) để README dễ nhìn hơn không?
