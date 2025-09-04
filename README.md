@@ -1,8 +1,8 @@
-# 🚀 problem2_DNG DSTC 2024: Xây Dựng Chiến Lược Đầu Tư Định Lượng Lai Dựa Trên Học Máy
+# 🚀 problem2_DNG DSTC 2025: Xây Dựng Chiến Lược Đầu Tư Định Lượng Lai Dựa Trên Học Máy
 
 ## 🎯 Giới Thiệu
 
-Đây là bài dự thi **DSTC 2024**, nơi chúng tôi trình bày một hệ thống **sàng lọc & giao dịch cổ phiếu định lượng hoàn chỉnh** cho thị trường chứng khoán Việt Nam.
+Đây là bài dự thi **DSTC 2025**, nơi chúng tôi trình bày một hệ thống **sàng lọc & giao dịch cổ phiếu định lượng hoàn chỉnh** cho thị trường chứng khoán Việt Nam.
 
 Dự án được lấy cảm hứng từ nghiên cứu *"Machine learning-based stock picking using value investing and quality features"* của **Priel & Rokach (2024)**, nhưng đã được **“Việt hóa” và tối ưu** để phù hợp với dữ liệu cũng như giới hạn của **API FiinQuant**.
 
