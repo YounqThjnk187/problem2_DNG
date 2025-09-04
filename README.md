@@ -25,6 +25,7 @@ Dự án gồm **3 file Python chính**, chạy theo thứ tự:
 1. `1_get_feature.py` → Thu thập & tạo bộ **features + target**.
 2. `2_training_model.py` → Huấn luyện mô hình `HistGradientBoostingClassifier` với **Time Series Cross-Validation**.
 3. `3_backtest_simulation.py` → Backtest chiến lược + trực quan hóa hiệu suất.
+4. `4_analyzis.py` → Phân tích Feature Importance.
 
 ## ⚙️ Hướng Dẫn Cài Đặt
 
