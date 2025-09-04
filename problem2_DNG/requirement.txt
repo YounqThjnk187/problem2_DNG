@@ -1,0 +1,12 @@
+# File: requirements.txt
+# Các thư viện cần thiết để chạy dự án DSTC 2024.
+# Để cài đặt, chạy lệnh: pip install -r requirements.txt
+
+pandas>=1.5.0
+numpy>=1.23.0
+scikit-learn>=1.2.0
+tqdm>=4.64.0
+joblib>=1.2.0
+matplotlib>=3.6.0
+fiinquantx>=2.0.0
+pyarrow>=10.0.0
